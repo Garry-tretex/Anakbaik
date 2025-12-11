@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Garry — Cyber Dark (Simulator & Labs Lokal)</title>
+  <style>
+    :root{--bg:#030007;--accent:#ff0033;--glow:#00ff99}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter, ui-monospace, SFMono-Regular, monospace;background:linear-gradient(180deg,#000,#05020a);color:var(--glow)}
+    header{position:fixed;top:0;left:0;right:0;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:rgba(0,0,0,0.45);backdrop-filter:blur(6px);z-index:40}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:44px;height:44px}
+    nav a{color:var(--glow);margin:0 8px;text-decoration:none}
+    main{max-width:1200px;margin:100px auto;padding:20px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:18px;border-radius:12px;border:1px solid rgba(0,255,153,0.04);box-shadow:0 10px 30px rgba(0,0,0,0.6)}
+    h1{color:var(--accent);text-shadow:0 0 18px rgba(255,0,51,0.12)}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
+    .thumb{min-height:120px;border-radius:8px;background:#07070b;display:flex;align-items:center;justify-content:center;padding:12px}
+    footer{margin-top:40px;color:rgba(0,255,153,0.5)}
+    .danger{color:var(--accent);font-weight:700}
+    .badge{display:inline-block;padding:6px 8px;border-radius:8px;background:rgba(255,0,51,0.06);border:1px solid rgba(255,0,51,0.12);}
+    .terminal{background:#020202;padding:12px;border-radius:8px;height:260px;overflow:auto;color:#9ef09e;border:1px solid rgba(0,255,153,0.08)}
+    .input-line{display:flex;gap:8px;margin-top:8px}
+    input.cmd, textarea{flex:1;background:transparent;border:1px solid rgba(255,255,255,0.04);outline:none;color:var(--glow);padding:8px;border-radius:8px}
+    .btn{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:8px 12px;border-radius:8px;cursor:pointer;color:var(--glow)}
+    .cols{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+    .small{font-size:13px;color:rgba(0,255,153,0.7)}
+    @media(max-width:1000px){.grid{grid-template-columns:repeat(1,1fr)} .cols{grid-template-columns:1fr}}
+    /* neon blood overlay */
+    .neon-title{position:relative}
+    .neon-title:after{content:'';position:absolute;left:50%;top:34px;width:300px;height:4px;background:linear-gradient(90deg,transparent,#ff0033,transparent);transform:translateX(-50%);filter:blur(6px);opacity:0.6}
+    .music{position:fixed;right:20px;bottom:20px;background:linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.35));padding:10px;border-radius:12px;border:1px solid rgba(255,0,51,0.08);z-index:50}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="logo" aria-hidden>
+      <svg width="44" height="44" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#ff0033"/><stop offset="1" stop-color="#aa00ff"/></linearGradient></defs>
+        <circle cx="32" cy="32" r="30" fill="none" stroke="url(#g)" stroke-width="2"></circle>
+        <path d="M18 44 C28 20, 36 20, 46 44" fill="none" stroke="url(#g)" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div>
+      <div style="font-weight:700">Garry</div>
+      <div style="font-size:12px;color:rgba(0,255,153,0.6)">Cyber Dark — Simulator, Labs Lokal, CTF</div>
+    </div>
+  </div>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#ctf">CTF</a>
+    <a href="#demos">Demos</a>
+    <a href="#lab">Lab Setup</a>
+    <a href="#blog">Blog</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<main>
+  <section id="home" class="card">
+    <h1 class="neon-title">Garry — Labs Lokal & CTF (Legal)</h1>
+    <p class="danger">PENTING — Website ini menolak pembuatan alat ilegal. Semua fitur yang ditambahkan adalah <strong>legal</strong>, berjalan sepenuhnya di browser atau digunakan untuk lab lokal yang Anda jalankan sendiri.</p>
+    <p class="small">Fitur baru yang ditambahkan: <strong>10 soal CTF interaktif</strong>, <strong>editor blog/markdown lokal</strong>, <strong>petunjuk Docker/VM</strong>, <strong>simulasi SQLi & XSS sandbox (browser-only)</strong>, serta tampilan visual neon + musik latar.</p>
+  </section>
+
+  <!-- CTF Section -->
+  <section id="ctf" style="margin-top:18px" class="card">
+    <h2>CTF Mini — 10 Challenges (Simulasi)</h2>
+    <p>Kerjakan tantangan di bawah. Masukkan jawaban (flag) pada kolom masing-masing. Semua validasi berjalan lokal (localStorage).</p>
+    <div id="ctfList" style="margin-top:12px">
+      <!-- JS will populate 10 challenges -->
+    </div>
+    <div style="margin-top:12px">
+      <button class="btn" onclick="showProgress()">Lihat Progress</button>
+      <button class="btn" onclick="resetCTF()">Reset Progress</button>
+    </div>
+  </section>
+
+  <!-- Demos -->
+  <section id="demos" style="margin-top:18px" class="card">
+    <h2>Interactive Demos (Sandboxed, Browser-only)</h2>
+    <div class="cols" style="margin-top:10px">
+      <div>
+        <h3>SQL Injection Simulator (Safe)</h3>
+        <p class="small">Demo ini menunjukkan bagaimana input dapat mengubah query pada aplikasi server—di sini semua dijalankan secara lokal dan tidak terhubung ke server nyata. Tujuan: edukasi deteksi dan mitigasi.</p>
+        <div style="display:flex;gap:8px;align-items:center;margin-top:6px"><input id="sqli_input" placeholder="Masukkan username OR '1'='1' (demo)" /><button class="btn" onclick="runSQLi()">Run</button></div>
+        <div id="sqli_result" style="margin-top:8px;background:#07070b;padding:10px;border-radius:8px;min-height:40px"></div>
+      </div>
+
+      <div>
+        <h3>XSS Simulator (Safe)</h3>
+        <p class="small">Perlihatkan perbedaan antara input yang disanitasi vs tidak. Jangan gunakan di situs nyata tanpa izin.</p>
+        <input id="xss_input" placeholder="Masukkan teks (contoh: <script>alert(1)</script>)" />
+        <div style="display:flex;gap:8px;margin-top:6px"><button class="btn" onclick="runXSS(false)">Render Raw (unsafe demo)</button><button class="btn" onclick="runXSS(true)">Render Sanitized</button></div>
+        <div id="xss_result" style="margin-top:8px;background:#07070b;padding:10px;border-radius:8px;min-height:40px"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lab Setup Instructions -->
+  <section id="lab" style="margin-top:18px" class="card">
+    <h2>Lab Setup — Docker / VM (Langkah Aman, High-level)</h2>
+    <p class="small">Petunjuk ringkas untuk menyiapkan lab lokal yang aman. Ikuti langkah ini hanya pada mesin lokal Anda — jangan jalankan pada jaringan publik.</p>
+    <ol>
+      <li>Install Docker atau VirtualBox pada mesin lokal Anda.</li>
+      <li>Jalankan container lab seperti <code>juice-shop</code> atau <code>dvwa</code> menggunakan image resmi dan baca dokumentasinya.</li>
+      <li>Gunakan jaringan NAT/host-only untuk isolasi; pastikan firewall memblock akses luar jika perlu.</li>
+      <li>Kerjakan exploit hanya pada VM/container yang memang dibuat untuk testing.</li>
+      <li>Pelajari mitigasi: input validation, prepared statements, CSP, dan sanitization.</li>
+    </ol>
+    <p class="small">Catatan: Saya tidak menyediakan instruksi untuk menyerang sistem lain. Langkah di atas adalah panduan aman untuk lab lokal.</p>
+  </section>
+
+  <!-- Blog editor -->
+  <section id="blog" style="margin-top:18px" class="card">
+    <h2>Blog / Markdown Editor (Local)</h2>
+    <p class="small">Tulis tutorial atau catatan dan simpan di browser (localStorage). Tidak ada server—semua data tersimpan di perangkat Anda.</p>
+    <div style="display:flex;gap:8px;margin-top:8px;flex-direction:column">
+      <input id="postTitle" placeholder="Judul post" />
+      <textarea id="postContent" rows="8" placeholder="Tulis markdown di sini..."></textarea>
+      <div style="display:flex;gap:8px"><button class="btn" onclick="savePost()">Save Local</button><button class="btn" onclick="loadPosts()">Load Posts</button></div>
+      <div id="postsArea" style="margin-top:12px"></div>
+    </div>
+  </section>
+
+  <!-- Contact & Footer -->
+  <section style="margin-top:18px" class="card">
+    <h2>Contact & Responsible Disclosure</h2>
+    <p class="small">Laporkan bug atau saran ke <a href="#">garry@example.com</a>. Situs ini tidak menyediakan alat hacking nyata.</p>
+  </section>
+
+  <footer style="margin-top:24px"><small>Disclaimer: Semua demo bersifat edukasi dan berjalan lokal/browser-only. Saya menolak permintaan untuk membuat alat yang memfasilitasi kegiatan ilegal.</small></footer>
+</main>
+
+<!-- Music control -->
+<div class="music">
+  <audio id="bgm" loop>
+    <source src="/assets/dark_loop.mp3" type="audio/mpeg" />
+    Your browser does not support the audio element.
+  </audio>
+  <div style="display:flex;gap:8px;align-items:center"><button class="btn" onclick="toggleMusic()">Play/Pause</button><button class="btn" onclick="muteMusic()">Mute</button></div>
+</div>
+
+<!-- Matrix canvas background -->
+<canvas id="matrixCanvas" style="position:fixed;left:0;top:0;z-index:-1"></canvas>
+
+<script>
+// Matrix background
+(function(){ const c=document.getElementById('matrixCanvas'); const ctx=c.getContext('2d'); function resize(){c.width=innerWidth;c.height=innerHeight;cols=Math.floor(c.width/14);drops=Array(cols).fill(1);} window.addEventListener('resize',resize); let cols=0; let drops=[]; const letters='0123456789ABCDEF@#$%&*()'; resize(); function draw(){ctx.fillStyle='rgba(0,0,0,0.06)';ctx.fillRect(0,0,c.width,c.height);ctx.fillStyle='rgba(0,255,153,0.6)';ctx.font='14px monospace'; for(let i=0;i<cols;i++){const t=letters[Math.floor(Math.random()*letters.length)];ctx.fillText(t,i*14,drops[i]*14); if(drops[i]*14>c.height&&Math.random()>0.975) drops[i]=0; drops[i]++;}} setInterval(draw,45);})();
+
+// Music controls
+const bgm=document.getElementById('bgm'); function toggleMusic(){ if(!bgm) return; if(bgm.paused) bgm.play(); else bgm.pause(); } function muteMusic(){ if(!bgm) return; bgm.muted=!bgm.muted; alert('Muted: '+bgm.muted); }
+
+// --- CTF: create 10 challenges (local flags) ---
+const challenges = [
+  {id:'c1',title:'Web 101','desc':'Lihat source page untuk hint. Flag format FLAG{...}.' ,flag:'FLAG{web_101_demo}'},
+  {id:'c2',title:'Crypto: Base64','desc':'Decode base64 untuk menemukan flag. Base64: RkxBR3tCRVNFMjQ1fQ==',flag:'FLAG{BESE245}'},
+  {id:'c3',title:'Forensics: Metadata','desc':'Analisa metadata gambar (demo) untuk menemukan flag.',flag:'FLAG{META_DEMO}'},
+  {id:'c4',title:'XSS: Reflected','desc':'Input reflected (browser-only demo).',flag:'FLAG{XSS_REFLECT}'},
+  {id:'c5',title:'SQLi: Auth Bypass','desc':'SQLi-sim sandbox has flag.',flag:'FLAG{SQLI_LOCAL}'},
+  {id:'c6',title:'Stego: Hidden Text','desc':'Cari teks tersembunyi pada art.',flag:'FLAG{STEGO_OK}'},
+  {id:'c7',title:'Reversing: Small','desc':'Reverse small script to get flag.',flag:'FLAG{REVERSE_ME}'},
+  {id:'c8',title:'OSINT: Public Hint','desc':'Hint tersedia di blog (local).',flag:'FLAG{OSINT_LOCAL}'},
+  {id:'c9',title:'Regex: Pattern','desc':'Tebak pola yang cocok.',flag:'FLAG{REGEX_RULES}'},
+  {id:'c10',title:'Final: Puzzle','desc':'Gabungkan hint dari C1-C4.',flag:'FLAG{FINAL_DEMO}'}
+];
+
+function renderCTF(){ const container=document.getElementById('ctfList'); container.innerHTML=''; challenges.forEach(ch=>{ const card=document.createElement('div'); card.className='card'; card.style.marginTop='8px'; card.innerHTML=`<strong>${ch.title}</strong><div class="small">${ch.desc}</div><div style="margin-top:8px;display:flex;gap:8px"><input id="in_${ch.id}" placeholder="Masukkan flag untuk ${ch.id}" /><button class="btn" onclick="submitFlag('${ch.id}')">Submit</button><span id="stat_${ch.id}" style="margin-left:8px;color:rgba(0,255,153,0.8)"></span></div>`; container.appendChild(card); updateStat(ch.id); }); }
+
+function submitFlag(id){ const input=document.getElementById('in_'+id); const val=input.value.trim(); const ch=challenges.find(c=>c.id===id); if(!ch) return; if(!val){ alert('Masukkan flag dulu'); return; } if(val===ch.flag){ localStorage.setItem('solved_'+id,'1'); alert('Benar! '+id); updateStat(id); } else { alert('Salah. Coba lagi.'); } input.value=''; }
+function updateStat(id){ const s=document.getElementById('stat_'+id); if(!s) return; s.textContent = localStorage.getItem('solved_'+id)?'Solved':'Unsolved'; }
+function showProgress(){ const solved = challenges.filter(c=>localStorage.getItem('solved_'+c.id)).length; alert('Solved: '+solved+' / '+challenges.length); }
+function resetCTF(){ if(confirm('Reset progress CTF?')){ challenges.forEach(c=>localStorage.removeItem('solved_'+c.id)); renderCTF(); alert('Reset complete'); } }
+renderCTF();
+
+// --- SQLi simulator (safe) ---
+function runSQLi(){ const v=document.getElementById('sqli_input').value; const out=document.getElementById('sqli_result'); out.innerHTML=''; if(!v){ out.textContent='Masukkan input untuk simulasi.'; return; } // simple simulated logic
+  // treat ' OR '1'='1' as bypass demonstration
+  const lowered=v.toLowerCase(); if(lowered.includes("' or '1'='1")|| lowered.includes(' or 1=1')|| lowered.includes("' or 1='1'")){
+    out.innerHTML="<strong>Query result:</strong> Authentication bypass simulated. <div class='small'>Demo flag: FLAG{SQLI_LOCAL}</div>";
+  } else if(lowered.includes('admin')){
+    out.innerHTML="<strong>Query result:</strong> user=admin (no flag).";
+  } else { out.innerHTML="<strong>Query result:</strong> user not found."; }
+}
+
+// --- XSS simulator (safe) ---
+function sanitize(input){ // naive sanitizer for demo
+  return input.replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function runXSS(safe){ const v=document.getElementById('xss_input').value; const res=document.getElementById('xss_result'); res.innerHTML=''; if(safe){ res.innerHTML = '<div class="small">Sanitized output:</div><div style="padding:8px;background:#000;border-radius:6px">'+sanitize(v)+'</div>'; } else { // raw render in an isolated element (still in this origin) but demonstrate unsafe
+    res.innerHTML = '<div class="small">Raw render (demo) — do NOT do this on sites you do not control.</div><div style="padding:8px;background:#000;border-radius:6px">'+v+'</div>'; }
+}
+
+// --- Blog editor (local) ---
+function savePost(){ const t=document.getElementById('postTitle').value.trim(); const c=document.getElementById('postContent').value.trim(); if(!t||!c){ alert('Masukkan judul dan konten'); return; } const posts = JSON.parse(localStorage.getItem('local_posts')||'[]'); posts.unshift({id:Date.now(),title:t,content:c}); localStorage.setItem('local_posts',JSON.stringify(posts)); alert('Saved locally'); loadPosts(); document.getElementById('postTitle').value=''; document.getElementById('postContent').value=''; }
+function loadPosts(){ const area=document.getElementById('postsArea'); area.innerHTML=''; const posts = JSON.parse(localStorage.getItem('local_posts')||'[]'); if(posts.length===0){ area.innerHTML='<div class="small">No posts saved.</div>'; return; } posts.forEach(p=>{ const el=document.createElement('div'); el.className='card'; el.style.marginTop='8px'; el.innerHTML=`<strong>${p.title}</strong><div class="small">${new Date(p.id).toLocaleString()}</div><div style="margin-top:8px;padding:8px;background:#07070b;border-radius:8px">${escapeHtml(p.content)}</div><div style="margin-top:8px"><button class="btn" onclick='deletePost(${p.id})'>Delete</button></div>`; area.appendChild(el); }); }
+function deletePost(id){ const posts=JSON.parse(localStorage.getItem('local_posts')||'[]'); const filtered=posts.filter(p=>p.id!==id); localStorage.setItem('local_posts',JSON.stringify(filtered)); loadPosts(); }
+function escapeHtml(str){ return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br/>'); }
+loadPosts();
+
+// Pre-seed demo flags (only if not present)
+(function seed(){ challenges.forEach(c=>{ if(!localStorage.getItem('flag_'+c.id)) localStorage.setItem('flag_'+c.id,c.flag); }); })();
+
+</script>
+
+</body>
+</html>
